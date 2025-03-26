@@ -44,6 +44,7 @@ const player6 = {
 };
 
 async function rollDice() {
+  //  arredonda para baixo ([0-1] * 6) + 1
   return Math.floor(Math.random() * 6) + 1;
 }
 
@@ -146,19 +147,40 @@ async function playRaceEngine(character1, character2) {
         diceResult2,
         character2.PODER
       );
-
-      if (powerResult1 > powerResult2 && character2.PONTOS > 0) {
-        console.log(
-          `${character1.NOME} venceu o confronto! ${character2.NOME} perdeu 1 ponto 🐢`
-        );
-        character2.PONTOS--;
+      
+      // sorteia com 33% de chance de vir bomba
+      let lessPoints = "casco"
+      if (Math.random() <= 0.33) {
+        lessPoints = "bomba"
       }
-
-      if (powerResult2 > powerResult1 && character1.PONTOS > 0) {
-        console.log(
-          `${character2.NOME} venceu o confronto! ${character1.NOME} perdeu 1 ponto 🐢`
-        );
-        character1.PONTOS--;
+      if (lessPoints === "casco") {
+        if (powerResult1 > powerResult2 && character2.PONTOS > 0) {
+          console.log(
+            `${character1.NOME} venceu o confronto! ${character2.NOME} perdeu 1 ponto 🐢`
+          );
+          character2.PONTOS--;
+        }
+  
+        if (powerResult2 > powerResult1 && character1.PONTOS > 0) {
+          console.log(
+            `${character2.NOME} venceu o confronto! ${character1.NOME} perdeu 1 ponto 🐢`
+          );
+          character1.PONTOS--;
+        }
+      } else {
+        if (powerResult1 > powerResult2 && character2.PONTOS > 1) {
+          console.log(
+            `${character1.NOME} venceu o confronto! ${character2.NOME} pisou na BOMBA e perdeu 2 pontos 💣`
+          );
+          character2.PONTOS--;
+        }
+  
+        if (powerResult2 > powerResult1 && character1.PONTOS > 1) {
+          console.log(
+            `${character2.NOME} venceu o confronto! ${character1.NOME} pisou na BOMBA e perdeu 2 pontos 💣`
+          );
+          character1.PONTOS -= 2;
+        }
       }
 
       console.log(
@@ -193,11 +215,26 @@ async function declareWinner(character1, character2) {
   else console.log("A corrida terminou em empate");
 }
 
+function sortPlayer() {
+  const playerIndex = Math.floor(Math.random() * 6) + 1;
+  switch (playerIndex) {
+    case 1: return player1;
+    case 2: return player2;
+    case 3: return player3;
+    case 4: return player4;
+    case 5: return player5;
+    case 6: return player6;
+    default: return player1;
+  }
+}
+
 (async function main() {
+  const p1 = sortPlayer()
+  const p2 = sortPlayer()
   console.log(
-    `🏁🚨 Corrida entre ${player1.NOME} e ${player2.NOME} começando...\n`
+    `🏁🚨 Corrida entre ${p1.NOME} e ${p2.NOME} começando...\n`
   );
 
-  await playRaceEngine(player1, player2);
-  await declareWinner(player1, player2);
+  await playRaceEngine(p1, p2);
+  await declareWinner(p1, p2);
 })();
