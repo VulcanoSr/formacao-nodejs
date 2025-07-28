@@ -1,12 +1,12 @@
 {
-  "name": "aula",
+  "name": "simulacao corrida mario kart",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "aplicação em js para uma simulação de corrida mario Kart",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [mariokart],
   "author": "",
   "license": "ISC"
 }
